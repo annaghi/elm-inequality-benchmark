@@ -61,21 +61,21 @@
         return position.b - element.b < 0 && position.a - element.a < 0
             ? 0
             : position.b - element.b < 0 &&
-              position.a - (element.a + viewport.F) > 0
+              position.a - (element.a + viewport.a) > 0
             ? 1
-            : position.b - (element.b + viewport.B) > 0 &&
+            : position.b - (element.b + viewport.b) > 0 &&
               position.a - element.a < 0
             ? 2
-            : position.b - (element.b + viewport.B) > 0 &&
-              position.a - (element.a + viewport.F) > 0
+            : position.b - (element.b + viewport.b) > 0 &&
+              position.a - (element.a + viewport.a) > 0
             ? 3
             : position.b - element.b < 0
             ? 4
-            : position.b - (element.b + viewport.B) > 0
+            : position.b - (element.b + viewport.b) > 0
             ? 5
             : position.a - element.a < 0
             ? 6
-            : position.a - (element.a + viewport.F) > 0
+            : position.a - (element.a + viewport.a) > 0
             ? 7
             : 8;
     });
@@ -85,28 +85,28 @@
             _Utils_cmp(position.a, element.a) < 0
             ? 0
             : _Utils_cmp(position.b, element.b) < 0 &&
-              _Utils_cmp(position.a, element.a + viewport.s) > 0
+              _Utils_cmp(position.a, element.a + viewport.a) > 0
             ? 1
-            : _Utils_cmp(position.b, element.b + viewport.q) > 0 &&
+            : _Utils_cmp(position.b, element.b + viewport.b) > 0 &&
               _Utils_cmp(position.a, element.a) < 0
             ? 2
-            : _Utils_cmp(position.b, element.b + viewport.q) > 0 &&
-              _Utils_cmp(position.a, element.a + viewport.s) > 0
+            : _Utils_cmp(position.b, element.b + viewport.b) > 0 &&
+              _Utils_cmp(position.a, element.a + viewport.a) > 0
             ? 3
             : _Utils_cmp(position.b, element.b) < 0
             ? 4
-            : _Utils_cmp(position.b, element.b + viewport.q) > 0
+            : _Utils_cmp(position.b, element.b + viewport.b) > 0
             ? 5
             : _Utils_cmp(position.a, element.a) < 0
             ? 6
-            : _Utils_cmp(position.a, element.a + viewport.s) > 0
+            : _Utils_cmp(position.a, element.a + viewport.a) > 0
             ? 7
             : 8;
     });
 
-    var position = { a: 1259, b: 762 };
-    var element = { x: 321, y: 654 };
-    var viewport = { height: 334, width: 574 };
+    var position = { a: 1000, b: 1000 };
+    var element = { a: 500, b: 500 };
+    var viewport = { a: 200, b: 1200 };
 
     suite('suite', suite => {
         bench('x - y < 0', () => direction(position, element, viewport));
