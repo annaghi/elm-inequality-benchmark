@@ -1,0 +1,115 @@
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/@prantlf/astrobench@1.1.0/dist/astrobench.min.css"
+/>
+<script src="https://unpkg.com/@prantlf/astrobench@1.1.0/dist/astrobench.min.js"></script>
+
+<div id="astrobench">
+    <div class="fn-suites"></div>
+</div>
+
+<script>
+    function F(arity, fun, wrapper) {
+        wrapper.a = arity;
+        wrapper.f = fun;
+        return wrapper;
+    }
+
+    function F3(fun) {
+        return F(3, fun, function(a) {
+            return function(b) {
+                return function(c) {
+                    return fun(a, b, c);
+                };
+            };
+        });
+    }
+
+    function _Utils_cmp(x, y, ord) {
+        if (typeof x !== 'object') {
+            return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+        }
+
+        /**_UNUSED/
+    if (x instanceof String)
+    {
+    	var a = x.valueOf();
+    	var b = y.valueOf();
+    	return a === b ? 0 : a < b ? -1 : 1;
+    }
+    //*/
+
+        /**/
+        if (typeof x.$ === 'undefined') {
+            //*/
+            /**_UNUSED/
+    if (x.$[0] === '#')
+    //*/
+            return (ord = _Utils_cmp(x.a, y.a))
+                ? ord
+                : (ord = _Utils_cmp(x.b, y.b))
+                ? ord
+                : _Utils_cmp(x.c, y.c);
+        }
+
+        // traverse conses until end of a list or a mismatch
+        for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+        return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+    }
+
+    var direction = F3(function(position, element, viewport) {
+        return position.b - element.b < 0 && position.a - element.a < 0
+            ? 0
+            : position.b - element.b < 0 &&
+              position.a - (element.a + viewport.F) > 0
+            ? 1
+            : position.b - (element.b + viewport.B) > 0 &&
+              position.a - element.a < 0
+            ? 2
+            : position.b - (element.b + viewport.B) > 0 &&
+              position.a - (element.a + viewport.F) > 0
+            ? 3
+            : position.b - element.b < 0
+            ? 4
+            : position.b - (element.b + viewport.B) > 0
+            ? 5
+            : position.a - element.a < 0
+            ? 6
+            : position.a - (element.a + viewport.F) > 0
+            ? 7
+            : 8;
+    });
+
+    var direction2 = F3(function(position, element, viewport) {
+        return _Utils_cmp(position.b, element.b) < 0 &&
+            _Utils_cmp(position.a, element.a) < 0
+            ? 0
+            : _Utils_cmp(position.b, element.b) < 0 &&
+              _Utils_cmp(position.a, element.a + viewport.s) > 0
+            ? 1
+            : _Utils_cmp(position.b, element.b + viewport.q) > 0 &&
+              _Utils_cmp(position.a, element.a) < 0
+            ? 2
+            : _Utils_cmp(position.b, element.b + viewport.q) > 0 &&
+              _Utils_cmp(position.a, element.a + viewport.s) > 0
+            ? 3
+            : _Utils_cmp(position.b, element.b) < 0
+            ? 4
+            : _Utils_cmp(position.b, element.b + viewport.q) > 0
+            ? 5
+            : _Utils_cmp(position.a, element.a) < 0
+            ? 6
+            : _Utils_cmp(position.a, element.a + viewport.s) > 0
+            ? 7
+            : 8;
+    });
+
+    var position = { a: 1259, b: 762 };
+    var element = { x: 321, y: 654 };
+    var viewport = { height: 334, width: 574 };
+
+    suite('suite', suite => {
+        bench('x - y < 0', () => direction(position, element, viewport));
+        bench('x < y', () => direction2(position, element, viewport));
+    });
+</script>
